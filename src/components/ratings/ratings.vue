@@ -1,13 +1,9 @@
 <template>
-  <div class="header">
-    I am header
-  </div>
-
+  <div> I am rating</div>
 </template>
 
 <script>
 export default {}
-
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
