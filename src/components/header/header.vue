@@ -15,32 +15,83 @@
           <span class="text" v-text="seller.supports[0].description"></span>
         </div>
       </div>
-      <div v-if="seller.supports" class="support-count">
+      <div v-if="seller.supports" class="support-count" @click="showDetail">
         <span class="count" v-text="seller.supports.length + '个'"></span>
         <i class="icon-keyboard_arrow_right"></i>
       </div>
     </div>
-    <div class="bulletin-wrapper">
+    <div class="bulletin-wrapper" @click="showDetail">
       <span class="bulletin-title"></span>
       <span class="bulletin-text" v-text="seller.bulletin"></span>
       <i class="icon-keyboard_arrow_right"></i>
     </div>
     <div class="background">
-        <img :src="seller.avatar" width="100%" height="100%">
+    </div>
+    <div v-show="detailShow" class="detail">
+      <div class="detail-wrapper clearfix">
+        <div class="detail-main">
+          <h1 class="name" v-text="seller.name"></h1>
+          <div class="star-wrapper">
+            <star :size="48" :score="seller.score"></star>
+          </div>
+          <div class="title">
+            <div class="line"></div>
+            <div class="text">优惠信息</div>
+            <div class="line"></div>
+          </div>
+          <ul v-if="seller.supports" class="supports">
+            <li class="support-item" v-for="item in seller.supports" :key="item">
+                <span class="icon" :class="classMap[item.type]"></span>
+                <span class="text" v-text="item.description"></span>
+            </li>
+          </ul>
+          <div class="title">
+            <div class="line"></div>
+            <div class="text">商家信息</div>
+            <div class="line"></div>
+          </div>
+          <div class="bulletin">
+            <p class="content" v-text="seller.bulletin"></p>
+          </div>
+        </div>
+
+      </div>
+      <div class="detail-close">
+        <i class="icon-close" @click="hiddeDetail"></i>
+      </div>
+
     </div>
   </div>
 </template>
 
-<script >
+<script>
+import star from '../../components/star/star'
 export default {
   props: {
     seller: {
       type: Object
     }
   },
+  data () {
+    return {
+      detailShow: false
+    }
+  },
   created () {
     this.classMap = ['decrease', 'discount', 'special', 'inovice', 'guarantee']
+  },
+  methods: {
+    showDetail () {
+      this.detailShow = true
+    },
+    hiddeDetail () {
+      this.detailShow = false
+    }
+  },
+  components: {
+    star
   }
+
 }
 
 </script>
@@ -158,4 +209,85 @@ export default {
       height: 100%
       z-index: -1
       filter:blur(10px)
+    .detail
+      position: fixed
+      z-index : 100
+      top:0
+      left:0
+      width: 100%
+      height: 100%
+      overflow : auto
+      background : rgba(7,17,27,0.8)
+      .detail-wrapper
+        width: 100%
+        min-height: 100%
+        .detail-main
+          margin-top : 64px
+          padding-bottom: 64px
+          .name
+            line-height : 16px
+            text-align : center
+            font-size :16px
+            font-weight :700
+          .star-wrapper
+            margin-top: 18px
+            padding : 2px 0
+            text-align : center
+          .title
+            display : flex
+            width:80%
+            margin: 30px auto 24px auto
+            .line
+              flex: 1
+              position : relative
+              top: -6px
+              border-bottom :1px solid rgba(255,255,255,0.2)
+            .text
+              padding  : 0 12px
+              font-size : 14px
+              font-weight: 700
+          .supports
+            width: 80%
+            margin: 0 auto
+            .support-item
+              padding : 0 12px
+              margin-bottom: 12px
+              font-size : 0
+              &:last-child
+                margin-bottom : 0
+              .icon
+                display : inline-block
+                width : 16px
+                height : 16px
+                vertical-align : top
+                margin-right : 16px
+                background-size :16px 16px
+                background-repeat : no-repeat
+                &.decrease
+                  big-image('decrease_2')
+                &.discount
+                  big-image('discount_2')
+                &.guarantee
+                  big-image('guarantee_2')
+                &.invoice
+                  big-image('invoice_2')
+                &.special
+                  big-image('special_2')
+              .text
+                line-height : 16px
+                font-size : 12px
+          .bulletin
+            width: 80%
+            margin: 0 auto
+            .content
+              padding: 0 12px
+              line-height: 24px
+              font-size: 12px
+      .detail-close
+        position: relative
+        width: 32px
+        height: 32px
+        margin: -64px auto 0 auto
+        clear: both
+        font-size: 32px
 </style>
